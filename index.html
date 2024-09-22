@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+        .class1 {
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 96%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #weather-info {
+            margin-top: 20px;
+            padding: 19px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Checker</h1>
+        <div class="class1">
+            <h1>City</h1>
+            <input type="text" placeholder="Enter city name" class="class1" id="city-input">
+        </div>
+        <button id="btn">Get Weather</button>
+        <div id="weather-info"></div>
+    </div>
+    <script>
+        let weather_info=document.getElementById("weather-info");
+        let inputvalue=document.getElementById('city-input');
+        let btn=document.getElementById('btn');
+        btn.addEventListener("click", updateweather)
+
+
+        function updateweather() {
+            let city=inputvalue.value;
+
+            if (city==="") {
+                weather_info.innerHTML="invalid city name"
+            }
+            const apikey="678b4b63a2944a97ed3f2353eda5fc05";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}`;
+            // console.log(url)
+
+            fetch(url) .then(response=>response.json())
+             .then(data=>{
+                if (data.cod ==='404') {
+                    weather_info.innerHTML="please correct city name";
+                }else{
+                    const tempreature=data.main.temp;
+                    // tempreature=tempreature.toFixed(2)
+                    const wdescription=data.weather[0].description;
+                    weather_info.innerHTML=`Tempreature: <b>${Math.round(tempreature-273)} °C </b> ${wdescription}`
+
+
+                }
+             })
+             .catch(error=>{
+                console.log(error)
+                weather_info.innerHTML="error occure while fatching data"
+             })
+        }
+
+    </script>
+</body>
+</html>
